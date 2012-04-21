@@ -30,7 +30,7 @@ describe NotificationStore do
       @store.add(Notification.new(:username => @username, :item_url => random_string, :text => random_string, :occured_at => random_time))
     end
     
-    subject { @store.get_for_user(@username) }
+    subject { @store.get_for_user(@username, 100) }
     
     it "returns 2 records" do
       subject.count.should eq(2)

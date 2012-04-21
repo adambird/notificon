@@ -45,6 +45,14 @@ module Notificon
       notification_store.mark_as_read(id, read_at)
     end
     
+    def add_notification(username, item_url, text, occured_at)
+      notification_store.add(Notification.new(:username => username, :item_url => item_url, :text => text, :occured_at => occured_at))
+    end
+    
+    def get_notifications(username, limit=100)
+      notification_store.get_for_user(username, limit)
+    end
+    
     private 
     
       def build_logger

@@ -20,7 +20,7 @@ module Notificon
       end
     end
     
-    def get_for_user(username, limit=100)
+    def get_for_user(username, limit)
       collection.find({'username' => username}, { :limit => limit, :sort => [['occured_at', :descending]]}).collect { |item_hash|
           Notification.new(item_hash)
         }
