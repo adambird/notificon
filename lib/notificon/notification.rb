@@ -16,5 +16,6 @@ module Notificon
     def read?
       !read_at.nil?
     end
+    
   end
 end
