@@ -2,10 +2,19 @@ module Notificon
   require "notificon/notification"
   require "notificon/mongo_store"
   require "notificon/notification_store"
+  require "notificon/controller"
   
   class << self
     def setup
       yield self
+    end
+    
+    def notification_id_param
+      @_notification_id_param ||= '_notificon_id'
+    end
+
+    def notification_id_param=(value)
+      @_notification_id_param = value
     end
     
     def connection_profile
@@ -32,6 +41,10 @@ module Notificon
       @_logger = value
     end
     
+    def mark_notification_read(id, read_at)
+      notification_store.mark_as_read(id, read_at)
+    end
+    
     private 
     
       def build_logger
@@ -41,8 +54,8 @@ module Notificon
         logger
       end
       
-      def coordinator
-        @_coordinator ||= Coordinator.new
+      def notification_store
+        @_notification_store ||= NotificationStore.new
       end
     
   end

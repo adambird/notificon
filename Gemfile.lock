@@ -1,5 +1,6 @@
 GEM
   specs:
+    addressable (2.2.7)
     bson (1.6.2)
     bson_ext (1.6.2)
       bson (~> 1.6.2)
@@ -19,6 +20,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  addressable
   bson_ext
   mongo
   rspec

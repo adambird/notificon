@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'addressable/uri'
 
 describe Notification do
   describe "#_id=" do
@@ -36,5 +37,36 @@ describe Notification do
         subject.should be_true
       end
     end
+  end
+  
+  describe "#url" do
+    before(:each) do
+      @id = random_string
+    end
+    
+    subject { Notification.new(:id => @id, :item_url => @item_url).url }
+    
+    context "url with query string param" do    
+      before(:each) do
+        @param = random_string
+        @value = random_string
+        @item_url = "http://#{random_string}.com?#{@param}=#{@value}"
+      end
+      it "should return url with notification param appended" do
+        # having to parse result to cope with order of query string params
+        uri = Addressable::URI.parse(subject)
+        uri.query_values.should eq({ @param => @value, Notificon.notification_id_param => @id })
+      end
+    end
+    
+    context "url with query string param" do    
+      before(:each) do
+        @item_url = "http://#{random_string}.co.uk"
+      end
+      it "should return url with notification param appended" do
+        subject.should eq("#{@item_url}?#{Notificon.notification_id_param}=#{@id}")
+      end
+    end
+    
   end
 end
