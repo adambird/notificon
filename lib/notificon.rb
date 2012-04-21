@@ -1,4 +1,7 @@
-module Readicon
+module Notificon
+  require "notificon/notification"
+  require "notificon/mongo_store"
+  require "notificon/notification_store"
   
   class << self
     def setup
