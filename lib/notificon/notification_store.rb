@@ -11,7 +11,8 @@ module Notificon
     
     def add(notification)
       collection.insert('username' => notification.username, 'item_url' => notification.item_url, 
-        'text' => notification.text, 'occured_at' => notification.occured_at && notification.occured_at.utc).to_s
+        'item_text' => notification.item_text, 'actor' => notification.actor, 'action' => notification.action,
+        'occured_at' => notification.occured_at && notification.occured_at.utc).to_s
     end
     
     def get(id)

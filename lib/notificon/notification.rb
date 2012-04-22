@@ -4,7 +4,7 @@ require 'addressable/uri'
 
 module Notificon
   class Notification
-    attr_accessor :id, :username, :item_url, :text, :occured_at, :read_at
+    attr_accessor :id, :username, :item_url, :item_text, :actor, :action, :occured_at, :read_at
     
     def initialize(attrs={})
       attrs.each_pair do |k,v| send("#{k}=", v) end

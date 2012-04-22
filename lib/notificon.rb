@@ -45,8 +45,9 @@ module Notificon
       notification_store.mark_as_read(id, read_at)
     end
     
-    def add_notification(username, item_url, text, occured_at)
-      notification_store.add(Notification.new(:username => username, :item_url => item_url, :text => text, :occured_at => occured_at))
+    def add_notification(username, item_url, item_text, actor, action, occured_at)
+      notification_store.add(Notification.new(:username => username, :item_url => item_url, 
+        :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at))
     end
     
     def get_notifications(username, limit=100)

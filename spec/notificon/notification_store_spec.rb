@@ -8,10 +8,13 @@ describe NotificationStore do
   describe "#add" do
     before(:each) do
       @username = random_string
-      @item_url = random_string
+      @item_text = random_string
       @text = random_string
+      @actor = random_string
+      @action = random_string
       @occured_at = random_time
-      @notification = Notification.new(:username => @username, :item_url => @item_url, :text => @text, :occured_at => @occured_at)
+      @notification = Notification.new(:username => @username, :item_url => @item_url, 
+        :item_text => @item_text, :actor => @actor, :action => @action, :occured_at => @occured_at)
     end
     
     subject { @store.add(@notification) }
@@ -19,15 +22,30 @@ describe NotificationStore do
     it "creates a record with username set" do
       @store.get(subject).username.should eq(@username)
     end
+    it "creates a record with actor set" do
+      @store.get(subject).actor.should eq(@actor)
+    end
+    it "creates a record with action set" do
+      @store.get(subject).action.should eq(@action)
+    end
+    it "creates a record with occured_at set" do
+      @store.get(subject).occured_at.to_i.should eq(@occured_at.to_i)
+    end
+    it "creates a record with item_url set" do
+      @store.get(subject).item_url.should eq(@item_url)
+    end
+    it "creates a record with item_text set" do
+      @store.get(subject).item_text.should eq(@item_text)
+    end
   end
   
   describe "#get_for_user" do
     before(:each) do
       @username = random_string
       
-      @store.add(Notification.new(:username => @username, :item_url => random_string, :text => random_string, :occured_at => random_time))
-      @store.add(Notification.new(:username => random_string, :item_url => random_string, :text => random_string, :occured_at => random_time))
-      @store.add(Notification.new(:username => @username, :item_url => random_string, :text => random_string, :occured_at => random_time))
+      @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @store.add(Notification.new(:username => random_string, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
     end
     
     subject { @store.get_for_user(@username, 100) }
@@ -39,8 +57,8 @@ describe NotificationStore do
   
   describe "#mark_as_read" do
     before(:each) do
-      @id = @store.add(Notification.new(:username => @username, :item_url => random_string, :text => random_string, :occured_at => random_time))
-      @store.add(Notification.new(:username => @username, :item_url => random_string, :text => random_string, :occured_at => random_time))
+      @id = @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
       @read_at = random_time
     end
 
