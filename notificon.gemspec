@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency('mongo', '~> 1.6')
   s.add_dependency('bson_ext', '~> 1.6')
+  s.add_dependency('addressable', '~> 2.2')
 end
