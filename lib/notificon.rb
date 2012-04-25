@@ -41,15 +41,41 @@ module Notificon
       @_logger = value
     end
     
+    # Mark a notification as read
+    # 
+    # @param [String] id of the notifcation to mark as read
+    # @param [Time] time the item was read
     def mark_notification_read(id, read_at)
+      raise ArgumentError.new("id must be a String") unless id.is_a? String
+      raise ArgumentError.new("read_at must be a Time") unless read_at.is_a? Time
+      
       notification_store.mark_as_read(id, read_at)
     end
     
+    # Add a notification to the users lists
+    # 
+    # @param [String] username for whom the notification is for
+    # @param [String] item_url the url of the item on which the actor performed the action
+    # @param [String] item_text the text that describes the item
+    # @param [String] actor the username of the user that performed the action
+    # @param [Symbol] action the action that the actor performed
+    # @param [Time] occured_at when the action was performed
     def add_notification(username, item_url, item_text, actor, action, occured_at)
+      raise ArgumentError.new("username must be a String") unless username.is_a? String
+      raise ArgumentError.new("item_url must be a String") unless item_url.is_a? String
+      raise ArgumentError.new("item_text must be a String") unless item_text.is_a? String
+      raise ArgumentError.new("actor must be a String") unless actor.is_a? String
+      raise ArgumentError.new("action must be a Symbol") unless action.is_a? Symbol
+      raise ArgumentError.new("occured_at must be a Time") unless occured_at .is_a? Time
+
       notification_store.add(Notification.new(:username => username, :item_url => item_url, 
         :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at))
     end
     
+    # Get the latest notifications for a given user
+    # 
+    # @param [String] username for whom the notifications are for
+    # @param [Fixnum, 100] limit the number of records to return
     def get_notifications(username, limit=100)
       notification_store.get_for_user(username, limit)
     end
