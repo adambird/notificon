@@ -1,5 +1,4 @@
-# Datamapper for Notification object
-
+# Private: Datamapper for Notification object
 module Notificon
   class NotificationStore
     include MongoStore

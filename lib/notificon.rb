@@ -7,8 +7,10 @@
 #   
 module Notificon
   require "notificon/notification"
+  require "notificon/user_state"
   require "notificon/mongo_store"
   require "notificon/notification_store"
+  require "notificon/user_state_store"
   require "notificon/controller"
   
   class << self
@@ -74,14 +76,17 @@ module Notificon
     # Public: Mark a notification as read
     #
     # id        - The String identifying the notification
+    # username  - The String identifying the user
     # read_at   - The Time the notitication was read
     #
     # Returns nothing
-    def mark_notification_read(id, read_at)
+    def mark_notification_read(id, username, read_at)
       raise ArgumentError.new("id must be a String") unless id.is_a? String
+      raise ArgumentError.new("username must be a String") unless username.is_a? String
       raise ArgumentError.new("read_at must be a Time") unless read_at.is_a? Time
       
       notification_store.mark_as_read(id, read_at)
+      user_state_store.decrement_notifications(username)
     end
     
     # Public: Add a notification to the users lists
@@ -104,6 +109,7 @@ module Notificon
 
       notification_store.add(Notification.new(:username => username, :item_url => item_url, 
         :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at))
+      user_state_store.increment_notifications(username)
     end
     
     # Public: Retrieve the most recent Notifications for user
@@ -119,6 +125,17 @@ module Notificon
       notification_store.get_for_user(username, limit)
     end
     
+    # Public: Retrieve the most known state of the user
+    #
+    # username   - The String identifying the user
+    #
+    # Returns UserState object describing the state
+    def get_user_state(username)
+      raise ArgumentError.new("username must be a String") unless username.is_a? String
+      
+      user_state_store.get(username)
+    end
+    
     private 
     
       def build_logger
@@ -131,5 +148,8 @@ module Notificon
         @_notification_store ||= NotificationStore.new
       end
     
+      def user_state_store
+        @_user_states_store ||= UserStateStore.new
+      end
   end
 end
