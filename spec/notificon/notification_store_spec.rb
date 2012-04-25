@@ -68,6 +68,9 @@ describe NotificationStore do
       subject
       @store.get(@id).read_at.to_i.should eq(@read_at.utc.to_i)
     end
+    it "returns the Notification" do
+      subject.id.should eq(@id)
+    end
   end
   
   describe "#mark_all_read_for_user" do

@@ -78,17 +78,15 @@ module Notificon
     # Public: Mark a notification as read
     #
     # id        - The String identifying the notification
-    # username  - The String identifying the user
     # read_at   - The Time the notitication was read
     #
     # Returns nothing
-    def mark_notification_read(id, username, read_at)
+    def mark_notification_read(id, read_at)
       raise ArgumentError.new("id must be a String") unless id.is_a? String
-      raise ArgumentError.new("username must be a String") unless username.is_a? String
       raise ArgumentError.new("read_at must be a Time") unless read_at.is_a? Time
       
-      notification_store.mark_as_read(id, read_at)
-      user_state_store.decrement_notifications(username)
+      notification = notification_store.mark_as_read(id, read_at)
+      user_state_store.decrement_notifications(notification.username)
     end
     
     # Public: Add a notification to the users lists
