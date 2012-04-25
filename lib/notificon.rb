@@ -2,7 +2,7 @@
 #
 # Examples
 #
-#   Notitication.add_notification('sam', 'http://company.com/items/audha,
+#   Notificon.add_notification('sam', 'http://company.com/items/audha,
 #     'Item title', 'bill', :commented, Time.now)
 #   
 module Notificon
