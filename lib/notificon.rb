@@ -37,6 +37,8 @@ module Notificon
 
     # Public: Sets the String to use for the notification_id_param
     def notification_id_param=(value)
+      raise ArgumentError.new("value must a string or nil") unless value.nil? || value.is_a?(String)
+
       @_notification_id_param = value
     end
     
@@ -48,7 +50,7 @@ module Notificon
 
     # Public: Sets the String for the connection_profile
     def connection_profile=(value)
-      raise ArgumentError.new("value must a string or nil") unless id id.is_a? String
+      raise ArgumentError.new("value must a string or nil") unless value.nil? || value.is_a?(String)
       
       @_connection_profile = value
     end
@@ -68,7 +70,7 @@ module Notificon
     # 
     # Returns the assigned Logger
     def logger=(value)
-      raise ArgumentError.new("value must be a Logger") unless id.is_a? Logger
+      raise ArgumentError.new("value must be a Logger") unless value.is_a? Logger
       
       @_logger = value
     end
