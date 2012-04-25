@@ -69,4 +69,39 @@ describe NotificationStore do
       @store.get(@id).read_at.to_i.should eq(@read_at.utc.to_i)
     end
   end
+  
+  describe "#mark_all_read_for_user" do
+    before(:each) do
+      @first_id = @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @first_read_at = random_time
+      @store.mark_as_read(@first_id, @first_read_at)
+      
+      @second_id = @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      
+      @third_id = @store.add(Notification.new(:username => random_string, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+
+      @fourth_id = @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+
+      @read_at = random_time
+    end
+    
+    subject { @store.mark_all_read_for_user(@username, @read_at) }
+    
+    it "leaves the first record as already read" do
+      subject
+      @store.get(@first_id).read_at.to_i.should eq(@first_read_at.to_i)
+    end
+    it "updates the second record as not read" do
+      subject
+      @store.get(@second_id).read_at.to_i.should eq(@read_at.to_i)
+    end
+    it "leaves the third record as not for the user" do
+      subject
+      @store.get(@third_id).read_at.should be_nil
+    end
+    it "updates the fourth record as not read" do
+      subject
+      @store.get(@fourth_id).read_at.to_i.should eq(@read_at.to_i)
+    end
+  end
 end

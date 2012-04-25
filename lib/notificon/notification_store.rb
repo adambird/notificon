@@ -29,5 +29,9 @@ module Notificon
     def mark_as_read(id, read_at)
       collection.update({'_id' => BSON::ObjectId.from_string(id)}, { '$set' => { 'read_at' => read_at.utc } })
     end
+    
+    def mark_all_read_for_user(username, read_at)
+      collection.update({'username' => username, 'read_at' => { '$exists' => false } }, { '$set' => { 'read_at' => read_at.utc}}, { :multi => true})
+    end
   end
 end

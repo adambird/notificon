@@ -125,7 +125,7 @@ module Notificon
       notification_store.get_for_user(username, limit)
     end
     
-    # Public: Retrieve the most known state of the user
+    # Public: Retrieve the known state of the user, ie notifcation count
     #
     # username   - The String identifying the user
     #
@@ -134,6 +134,18 @@ module Notificon
       raise ArgumentError.new("username must be a String") unless username.is_a? String
       
       user_state_store.get(username)
+    end
+    
+    # Public: Clear all unread notifications for the user
+    # 
+    # username    - The String identifying the user
+    # 
+    # Returns nothing
+    def clear_notifications(usernames)
+      raise ArgumentError.new("username must be a String") unless username.is_a? String
+
+      notification_store.mark_all_read_for_user(username)
+      user_state_store.clear_notifications(username)
     end
     
     private 
