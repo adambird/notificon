@@ -86,7 +86,7 @@ module Notificon
       raise ArgumentError.new("read_at must be a Time") unless read_at.is_a? Time
       
       notification = notification_store.mark_as_read(id, read_at)
-      user_state_store.set_notifications(notification.username, notification_store.unread_count_for_user)
+      update_user_unread_counts(notification.username)
     end
     
     # Public: Add a notification to the users lists
@@ -109,7 +109,7 @@ module Notificon
 
       notification_store.add(Notification.new(:username => username, :item_url => item_url, 
         :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at))
-      user_state_store.set_notifications(notification.username, notification_store.unread_count_for_user)
+      update_user_unread_counts(username)
     end
     
     # Public: Retrieve the most recent Notifications for user
@@ -148,20 +148,24 @@ module Notificon
       user_state_store.clear_notifications(username)
     end
     
-    private 
+  private 
     
-      def build_logger
-        logger = Logger.new(STDOUT)
-        logger.progname = "Notificon"
-        logger
-      end
-      
-      def notification_store
-        @_notification_store ||= NotificationStore.new
-      end
+    def update_user_unread_counts(username)
+      user_state_store.set_notifications(username, notification_store.unread_count_for_user)
+    end
     
-      def user_state_store
-        @_user_states_store ||= UserStateStore.new
-      end
+    def build_logger
+      logger = Logger.new(STDOUT)
+      logger.progname = "Notificon"
+      logger
+    end
+    
+    def notification_store
+      @_notification_store ||= NotificationStore.new
+    end
+  
+    def user_state_store
+      @_user_states_store ||= UserStateStore.new
+    end
   end
 end

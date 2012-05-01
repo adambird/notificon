@@ -38,5 +38,6 @@ module Notificon
     def mark_all_read_for_user(username, read_at)
       collection.update({'username' => username, 'read_at' => { '$exists' => false } }, { '$set' => { 'read_at' => read_at.utc}}, { :multi => true})
     end
+
   end
 end
