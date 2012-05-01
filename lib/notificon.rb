@@ -86,7 +86,7 @@ module Notificon
       raise ArgumentError.new("read_at must be a Time") unless read_at.is_a? Time
       
       notification = notification_store.mark_as_read(id, read_at)
-      user_state_store.decrement_notifications(notification.username)
+      user_state_store.set_notifications(notification.username, notification_store.unread_count_for_user)
     end
     
     # Public: Add a notification to the users lists
@@ -109,7 +109,7 @@ module Notificon
 
       notification_store.add(Notification.new(:username => username, :item_url => item_url, 
         :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at))
-      user_state_store.increment_notifications(username)
+      user_state_store.set_notifications(notification.username, notification_store.unread_count_for_user)
     end
     
     # Public: Retrieve the most recent Notifications for user

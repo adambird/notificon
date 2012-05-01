@@ -26,6 +26,10 @@ module Notificon
         }
     end
     
+    def unread_count_for_user(username)
+      collection.count(:query => {'username' => username, 'read_at' => { '$exists' => false }})
+    end
+    
     def mark_as_read(id, read_at)
       collection.update({'_id' => BSON::ObjectId.from_string(id)}, { '$set' => { 'read_at' => read_at.utc } })
       get(id)

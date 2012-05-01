@@ -14,16 +14,8 @@ module Notificon
       end
     end
     
-    def increment_notifications(username)
-      change_notifications(username, 1)
-    end
-    
-    def decrement_notifications(username)
-      change_notifications(username, -1)
-    end
-    
-    def change_notifications(username, delta)
-      collection.update({'username' => username}, { '$inc' => { 'notifications' => delta } }, { :upsert => true })
+    def set_notifications(username, notifications)
+      collection.update({'username' => username}, { 'notifications' => notifications } )
     end
     
     def clear_notifications(username)

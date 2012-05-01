@@ -55,6 +55,24 @@ describe NotificationStore do
     end
   end
   
+  describe "#unread_count_for_user" do
+    before(:each) do
+      @username = random_string
+      
+      @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      id = @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @store.add(Notification.new(:username => random_string, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
+      @store.mark_as_read(id, random_time)
+    end
+    
+    subject { @store.unread_count_for_user(@username) }
+    
+    it "returns 2" do
+      subject.should eq(2)
+    end
+  end
+  
   describe "#mark_as_read" do
     before(:each) do
       @id = @store.add(Notification.new(:username => @username, :item_url => random_string, :item_text => random_string, :actor => random_string, :occured_at => random_time))
