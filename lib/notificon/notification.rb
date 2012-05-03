@@ -21,9 +21,8 @@ module Notificon
     
     def url
       uri = Addressable::URI.parse(item_url)
-      output = item_url
-      output += uri.query ? "&" : "?"
-      output += "#{Notificon.notification_id_param}=#{id}"
+      uri.query_values = (uri.query_values || {}).merge(Notificon.notification_id_param => id)
+      uri.to_s
     end
   end
 end

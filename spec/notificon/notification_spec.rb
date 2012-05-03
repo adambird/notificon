@@ -73,7 +73,7 @@ describe Notification do
         @item_url = "/clubs/4f8ea8bb3d99cf0001000008/posts/4f995996cc1db30001000001#4f9fa6f673a9650001000009"
       end
       it "should return url" do
-        subject.should eq("/clubs/4f8ea8bb3d99cf0001000008/posts/4f995996cc1db30001000001#4f9fa6f673a9650001000009?#{Notificon.notification_id_param}=#{@id}")
+        subject.should eq("/clubs/4f8ea8bb3d99cf0001000008/posts/4f995996cc1db30001000001?#{Notificon.notification_id_param}=#{@id}#4f9fa6f673a9650001000009")
       end 
     end
   end
