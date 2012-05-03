@@ -148,11 +148,11 @@ module Notificon
       user_state_store.clear_notifications(username)
     end
     
-  private 
-    
     def update_user_unread_counts(username)
-      user_state_store.set_notifications(username, notification_store.unread_count_for_user)
+      user_state_store.set_notifications(username, notification_store.unread_count_for_user(username))
     end
+
+  private 
     
     def build_logger
       logger = Logger.new(STDOUT)
