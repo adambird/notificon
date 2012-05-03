@@ -12,6 +12,7 @@ module Notificon
   require "notificon/notification_store"
   require "notificon/user_state_store"
   require "notificon/controller"
+  require 'logger'
   
   class << self
     # Public: accessor method used to config the gem

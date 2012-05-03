@@ -15,7 +15,7 @@ module Notificon
     end
     
     def set_notifications(username, notifications)
-      collection.update({'username' => username}, { 'notifications' => notifications } )
+      collection.update({'username' => username}, { '$set' => { 'notifications' => notifications }}, { :upsert => true } )
     end
     
     def clear_notifications(username)
