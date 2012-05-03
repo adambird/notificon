@@ -71,8 +71,6 @@ module Notificon
     # 
     # Returns the assigned Logger
     def logger=(value)
-      raise ArgumentError.new("value must be a Logger") unless value.is_a? Logger
-      
       @_logger = value
     end
     
