@@ -13,8 +13,9 @@ describe NotificationStore do
       @actor = random_string
       @action = random_string
       @occured_at = random_time
+      @item_id = random_string
       @notification = Notification.new(:username => @username, :item_url => @item_url, 
-        :item_text => @item_text, :actor => @actor, :action => @action, :occured_at => @occured_at)
+        :item_text => @item_text, :actor => @actor, :action => @action, :occured_at => @occured_at, :item_id => @item_id)
     end
     
     subject { @store.add(@notification) }
@@ -36,6 +37,9 @@ describe NotificationStore do
     end
     it "creates a record with item_text set" do
       @store.get(subject).item_text.should eq(@item_text)
+    end
+    it "creates a record with item_id set" do
+      @store.get(subject).item_id.should eq(@item_id)
     end
   end
   
@@ -123,6 +127,46 @@ describe NotificationStore do
     it "updates the fourth record as not read" do
       subject
       @store.get(@fourth_id).read_at.to_i.should eq(@read_at.to_i)
+    end
+  end
+  
+  describe "#mark_all_read_for_item" do
+    before(:each) do
+      @item_id = random_string
+      @first_id = @store.add(Notification.new(:username => @username, :item_url => random_string, 
+        :item_text => random_string, :actor => random_string, :occured_at => random_time, :item_id => @item_id))
+      @first_read_at = random_time
+      @store.mark_as_read(@first_id, @first_read_at)
+      
+      @second_id = @store.add(Notification.new(:username => @username, :item_url => random_string, 
+        :item_text => random_string, :actor => random_string, :occured_at => random_time, :item_id => @item_id))
+      
+      @third_id = @store.add(Notification.new(:username => random_string, :item_url => random_string, 
+        :item_text => random_string, :actor => random_string, :occured_at => random_time, :item_id => @item_id))
+
+      @fourth_id = @store.add(Notification.new(:username => @username, :item_url => random_string, 
+        :item_text => random_string, :actor => random_string, :occured_at => random_time, :item_id => random_string))
+
+      @read_at = random_time
+    end
+    
+    subject { @store.mark_all_read_for_item(@username, @item_id, @read_at) }
+    
+    it "leaves the first record as already read" do
+      subject
+      @store.get(@first_id).read_at.to_i.should eq(@first_read_at.to_i)
+    end
+    it "updates the second record as not read" do
+      subject
+      @store.get(@second_id).read_at.to_i.should eq(@read_at.to_i)
+    end
+    it "leaves the third record as not for the user" do
+      subject
+      @store.get(@third_id).read_at.should be_nil
+    end
+    it "leaves the fourth record as not for the item" do
+      subject
+      @store.get(@fourth_id).read_at.should be_nil
     end
   end
 end

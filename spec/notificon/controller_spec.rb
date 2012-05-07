@@ -29,6 +29,23 @@ describe Controller do
         Notificon.should_receive(:mark_notification_read).with(@id, @time)
         subject
       end
+      
+      context "when item_id param passed" do
+        before(:each) do
+          @item_id = random_string
+          @username = random_string
+          @controller.params[Notificon.notification_item_id_param] = @item_id
+          @controller.params[Notificon.notification_username_param] = @username
+        end
+        it "does not attempt to mark notification" do
+          Notificon.should_not_receive(:mark_notification_read)
+          subject
+        end
+        it "marks all the notifications for the item read" do
+          Notificon.should_receive(:mark_all_read_for_item).with(@username, @item_id, @time)
+          subject
+        end
+      end
     end
     
     context "when id param not passed" do

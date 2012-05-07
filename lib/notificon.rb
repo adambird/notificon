@@ -36,6 +36,16 @@ module Notificon
       @_notification_id_param ||= '_notificon_id'
     end
 
+    # Public: Returns the query string parameter used to identify the notification item.
+    def notification_item_id_param
+      "#{notification_id_param}_item"
+    end
+    
+    # Public: Returns the query string parameter used to identify the user.
+    def notification_username_param
+      "#{notification_id_param}_user"
+    end
+    
     # Public: Sets the String to use for the notification_id_param
     def notification_id_param=(value)
       raise ArgumentError.new("value must a string or nil") unless value.nil? || value.is_a?(String)
@@ -88,6 +98,22 @@ module Notificon
       update_user_unread_counts(notification.username)
     end
     
+    # Public: Mark a notification as read
+    #
+    # username  - The String identifying the user
+    # item_id   - The String identifying the notification item
+    # read_at   - The Time the notitication was read
+    #
+    # Returns nothing
+    def mark_all_read_for_item(username, item_id, read_at)
+      raise ArgumentError.new("username must be a String") unless username.is_a? String
+      raise ArgumentError.new("item_id must be a String") unless item_id.is_a? String
+      raise ArgumentError.new("read_at must be a Time") unless read_at.is_a? Time
+      
+      notification_store.mark_all_read_for_item(username, item_id, read_at)
+      update_user_unread_counts(username)
+    end
+    
     # Public: Add a notification to the users lists
     #
     # username   - The String identifying the user being notified
@@ -96,9 +122,10 @@ module Notificon
     # actor      - The String identifying the user that performed the action
     # action     - A Symbol representing the action that the actor performed
     # occured_at - The Time the action was performed
+    # item_id    - A String uniquely identifying the item the notification is for
     #
     # Returns the String id of the Notification generated
-    def add_notification(username, item_url, item_text, actor, action, occured_at)
+    def add_notification(username, item_url, item_text, actor, action, occured_at, item_id=nil)
       raise ArgumentError.new("username must be a String") unless username.is_a? String
       raise ArgumentError.new("item_url must be a String") unless item_url.is_a? String
       raise ArgumentError.new("item_text must be a String") unless item_text.is_a? String
@@ -107,7 +134,7 @@ module Notificon
       raise ArgumentError.new("occured_at must be a Time") unless occured_at .is_a? Time
 
       notification_store.add(Notification.new(:username => username, :item_url => item_url, 
-        :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at))
+        :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at, :item_id => item_id))
       update_user_unread_counts(username)
     end
     

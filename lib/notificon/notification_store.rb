@@ -11,7 +11,7 @@ module Notificon
     def add(notification)
       collection.insert('username' => notification.username, 'item_url' => notification.item_url, 
         'item_text' => notification.item_text, 'actor' => notification.actor, 'action' => notification.action,
-        'occured_at' => notification.occured_at && notification.occured_at.utc).to_s
+        'occured_at' => notification.occured_at && notification.occured_at.utc, 'item_id' => notification.item_id).to_s
     end
     
     def get(id)
@@ -39,5 +39,8 @@ module Notificon
       collection.update({'username' => username, 'read_at' => { '$exists' => false } }, { '$set' => { 'read_at' => read_at.utc}}, { :multi => true})
     end
 
+    def mark_all_read_for_item(username, item_id, read_at)
+      collection.update({'username' => username, 'item_id' => item_id, 'read_at' => { '$exists' => false } }, { '$set' => { 'read_at' => read_at.utc}}, { :multi => true})
+    end
   end
 end

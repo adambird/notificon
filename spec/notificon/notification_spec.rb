@@ -42,9 +42,11 @@ describe Notification do
   describe "#url" do
     before(:each) do
       @id = random_string
+      @item_id = nil
+      @username = random_string
     end
     
-    subject { Notification.new(:id => @id, :item_url => @item_url).url }
+    subject { Notification.new(:id => @id, :item_url => @item_url, :item_id => @item_id, :username => @username).url }
     
     context "url with query string param" do    
       before(:each) do
@@ -75,6 +77,16 @@ describe Notification do
       it "should return url" do
         subject.should eq("/clubs/4f8ea8bb3d99cf0001000008/posts/4f995996cc1db30001000001?#{Notificon.notification_id_param}=#{@id}#4f9fa6f673a9650001000009")
       end 
+    end
+    
+    context "when item_id present" do
+      before(:each) do
+        @item_url = "http://#{random_string}.co.uk"
+        @item_id = random_string
+      end
+      it "returns the url with both item_id and username" do
+        subject.should eq("#{@item_url}?#{Notificon.notification_id_param}=#{@id}&#{Notificon.notification_item_id_param}=#{@item_id}&#{Notificon.notification_username_param}=#{@username}")
+      end
     end
   end
 end
