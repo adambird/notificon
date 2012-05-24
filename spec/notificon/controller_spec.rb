@@ -6,7 +6,6 @@ class DummyController
   def params
     @_params ||= {}
   end
-
 end
 
 describe Controller do
@@ -15,6 +14,7 @@ describe Controller do
       @controller = DummyController.new
       @time = random_time
       @controller.stub(:current_time) { @time }
+      @controller.stub(:request) { mock("Request", :get? => true) }
     end
 
     subject { @controller.notificon_tracker }

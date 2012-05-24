@@ -12,7 +12,7 @@ module Notificon
     #
     # Returns bookean indicating whether updates made
     def notificon_tracker
-      _track_explicit_read | _track_implicit_read
+      request.get? && (_track_explicit_read | _track_implicit_read)
     rescue => e
       Notificon.logger.error { "Notificon::Controller#notificon_tracker error processing notification params - #{params.inspect} error - #{e.inspect}" }
     end
