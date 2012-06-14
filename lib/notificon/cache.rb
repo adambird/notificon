@@ -4,7 +4,7 @@ module Notificon
   module Cache
 
     def cache_enabled?
-      Notificon.cache && Notificon.cache.cache_enabled?
+      Notificon.cache
     end
 
     def cache_fetch(key)
