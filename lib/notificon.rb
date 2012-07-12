@@ -171,10 +171,10 @@ module Notificon
     # username    - The String identifying the user
     #
     # Returns nothing
-    def clear_notifications(usernames)
+    def clear_notifications(username)
       raise ArgumentError.new("username must be a String") unless username.is_a? String
 
-      notification_store.mark_all_read_for_user(username)
+      notification_store.mark_all_read_for_user(username, Time.now)
       user_state_store.clear_notifications(username)
     end
 
