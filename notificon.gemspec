@@ -4,7 +4,7 @@ require "notificon/version"
 Gem::Specification.new do |s|
   s.name        = "notificon"
   s.version     = Notificon::VERSION.dup
-  s.platform    = Gem::Platform::RUBY 
+  s.platform    = Gem::Platform::RUBY
   s.summary     = "Gem for tracking and managing application notifications"
   s.email       = "adam.bird@gmail.com"
   s.homepage    = "http://github.com/adambird/notificon"
