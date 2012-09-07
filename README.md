@@ -2,7 +2,7 @@
 
 Gem for tracking and managing application notifications for users. Just an abstraction of some common functionality.
 
-It currently uses MongoDB as a back end
+It currently uses MongoDB as a datastore
 
 ## Setup
 
@@ -14,7 +14,7 @@ Configure the data store
 
 ```ruby
 Notificon.setup do |config|
-  config.connection_profile = mongodb://.......
+  config.connection_profile = mongodb://server
 end
 ```
 
