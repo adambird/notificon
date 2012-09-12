@@ -137,11 +137,21 @@ module Notificon
       raise ArgumentError.new("action must be a Symbol") unless action.is_a? Symbol
       raise ArgumentError.new("occured_at must be a Time") unless occured_at .is_a? Time
 
-      notification_store.add(Notification.new(:username => username, :item_url => item_url,
+      id = notification_store.add(Notification.new(:username => username, :item_url => item_url,
         :item_text => item_text, :actor => actor, :action => action, :occured_at => occured_at, :item_id => item_id))
       update_user_unread_counts(username)
+      id
     end
 
+    # Public : Retrieve a specific notification
+    #
+    # id        - String id of the notification
+    #
+    # Returns Notification 
+    def get_notification(id)
+      notification_store.get(id)
+    end 
+    
     # Public: Retrieve the most recent Notifications for user
     #
     # username   - The String identifying the user

@@ -41,6 +41,9 @@ describe NotificationStore do
     it "creates a record with item_id set" do
       @store.get(subject).item_id.should eq(@item_id)
     end
+    it "returns the id" do
+      subject.should_not be_nil
+    end
   end
   
   describe "#get_for_user" do

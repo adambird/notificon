@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Notificon do
   before(:each) do
-    @notification = Notification.new(:id => @id = random_string, :username => @username = random_string)
+    @notification = Notification.new(:id => @id = random_object_id, :username => @username = random_string)
     Notification.stub(:new) { @notification }
 
     @unread_count = random_integer
-    @notification_store = mock(NotificationStore, :add => true, :unread_count_for_user => @unread_count, :mark_as_read => @notification)
+    @notification_store = mock(NotificationStore, :add => @id, :unread_count_for_user => @unread_count, :mark_as_read => @notification)
     Notificon.stub(:notification_store) { @notification_store }
     @user_state_store = mock(UserStateStore, :set_notifications => true)
     Notificon.stub(:user_state_store) { @user_state_store }
@@ -34,6 +34,9 @@ describe Notificon do
     it "updates the unread count for the user" do
       @user_state_store.should_receive(:set_notifications).with(@username, @unread_count)
       subject
+    end
+    it "returns the id of the items" do
+      subject.should eq(@id)
     end
     context "when item id passed" do
       before(:each) do
@@ -117,6 +120,22 @@ describe Notificon do
     it "updates the unread count for the user" do
       @user_state_store.should_receive(:clear_notifications).with(@username)
       subject
+    end
+  end
+  
+  describe ".get_notification" do
+    before(:each) do
+      @notification_store.stub(:get) { @notification }
+    end
+    
+    subject { Notificon.get_notification(@notification.id) }
+    
+    it "should get the notification from the store" do
+      @notification_store.should_receive(:get).with(@notification.id)
+      subject
+    end
+    it "should return the notification" do
+      subject.should eq(@notification)
     end
   end
 end
