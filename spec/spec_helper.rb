@@ -4,6 +4,10 @@ require "#{Rake.application.original_dir}/lib/notificon"
 
 include Notificon
 
+Notificon.setup do |config|
+  config.connection_profile = "mongodb://localhost/notificon_test"
+end
+
 RSpec.configure do |config|
   # Use color in STDOUT
   config.color_enabled = true

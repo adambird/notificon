@@ -14,14 +14,9 @@ module Notificon
     end
 
     def open_connection
-      @db ||= open_store
+      Notificon.connection.db(Notificon.database)
     end
 
-    def open_store
-      uri  = URI.parse(Notificon.connection_profile)
-      Connection.from_uri(Notificon.connection_profile).db(uri.path.gsub(/^\//, ''))
-    end
-    
     def collection 
       @_collection ||= open_connection[self.class.collection_name]   
     end

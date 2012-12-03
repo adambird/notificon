@@ -29,10 +29,15 @@ module Notificon
     # Returns nothing
     def setup
       yield self
+
+      @connection = Mongo::MongoClient.from_uri(Notificon.connection_profile)
+      @database = URI.parse(Notificon.connection_profile).path.gsub(/^\//, '')
     end
 
     # Public: cache to be used
     attr_accessor :cache
+    
+    attr_reader :connection, :database
 
     # Public: Returns the query string parameter used to identify the notification.
     #   defaults to '_notificon_id' if not set
@@ -60,7 +65,7 @@ module Notificon
     # Public: Returns the connection profile for the datastore. Currently only mongo
     #   supported. Defaults to mongodb://localhost/notificon_default if not set
     def connection_profile
-      @_connection_profile ||= "mongodb://localhost/notificon_default"
+      @_connection_profile
     end
 
     # Public: Sets the String for the connection_profile
